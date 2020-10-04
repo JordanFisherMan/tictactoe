@@ -10,7 +10,7 @@ export default class Game extends React.Component {
         squares: Array(9).fill(null),
       }],
       stepNumber: 0,
-      xIsNext: true,
+      xIsNext: true
     };
   }
 
@@ -43,7 +43,7 @@ export default class Game extends React.Component {
       const current = history[this.state.stepNumber];
       const winner = calculateWinner(current.squares);
 
-      const moves = history.map((step, move, x, y) => {
+      const moves = history.map((step, move) => {
         const desc = move ?
           'Go to move #' + move:
           'Go to game start';
