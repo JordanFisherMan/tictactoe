@@ -10,7 +10,8 @@ export default class Game extends React.Component {
         squares: Array(9).fill(null),
       }],
       stepNumber: 0,
-      xIsNext: true
+      xIsNext: true,
+      lastPos: null
     };
   }
 
@@ -28,6 +29,7 @@ export default class Game extends React.Component {
       }]),
       stepNumber: history.length,
       xIsNext: !this.state.xIsNext,
+      lastPos: [getX(i), getY(i)]
     });
   }
 
@@ -44,9 +46,7 @@ export default class Game extends React.Component {
       const winner = calculateWinner(current.squares);
 
       const moves = history.map((step, move) => {
-        const desc = move ?
-          'Go to move #' + move:
-          'Go to game start';
+      const desc = move ? 'Go to move #' + move + " X: " + this.state.lastPos[0] + " Y: " + this.state.lastPos[1] : 'Go to game start';
         return (
           <li key={move}>
             <button onClick={() => this.jumpTo(move)}>{desc}</button>
@@ -97,3 +97,29 @@ export default class Game extends React.Component {
     }
     return null;
   }
+
+  function getX(i){
+    let one = [0, 3, 6];
+    if(one.includes(i)){
+      return 1;
+    }
+    let two = [1, 4, 7];
+    if(two.includes(i)){
+      return 2;
+    }
+    return 3;
+  }
+
+  function getY(i){
+    let one = [6, 7, 8];
+    if(one.includes(i)){
+      return 1;
+    }
+    let two = [3, 4, 5];
+    if(two.includes(i)){
+      return 2;
+    }
+    return 3;
+  }
+
+  
