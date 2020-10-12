@@ -40,6 +40,10 @@ export default class Game extends React.Component {
     });
   }
 
+  sort(){
+    alert('working');
+  }
+
     render() {
       const history = this.state.history;
       const current = history[this.state.stepNumber];
@@ -65,6 +69,8 @@ export default class Game extends React.Component {
         status = 'Next player: ' + (this.state.xIsNext ? 'X' : 'O');
       }
 
+      let sort_toggle = <button onClick={() => this.sort()}>Ascending</button>
+
       return (
         <div className="game">
           <div className="game-board">
@@ -75,12 +81,15 @@ export default class Game extends React.Component {
           </div>
           <div className="game-info">
             <div>{status}</div>
+            <div>{sort_toggle}</div>
             <ol>{moves}</ol>
           </div>
         </div>
       );
       }
   }
+
+  
 
   function calculateWinner(squares) {
     const lines = [
