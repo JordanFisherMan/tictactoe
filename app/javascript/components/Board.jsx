@@ -4,9 +4,14 @@ import Square from './Square';
 export default class Board extends React.Component {
 
     renderSquare(i) {
+      let winner = null;
+      if(this.props.winner != undefined){
+        winner = this.props.winner.includes(i) ? 'winner' : ''
+      }
       return <Square 
       value={ this.props.squares[i] } 
       onClick={ () => this.props.onClick(i) }
+      winner={ winner }
       />;
     }
 

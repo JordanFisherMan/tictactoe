@@ -104,3 +104,7 @@
   .bold{
     font-weight: bold;
   }
+
+  .winner{
+    border: 2px solid red;
+  }

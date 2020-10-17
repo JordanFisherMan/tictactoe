@@ -11,7 +11,8 @@ export default class Game extends React.Component {
       }],
       stepNumber: 0,
       xIsNext: true,
-      lastPos: null
+      lastPos: null,
+      sortOrder: "descending"
     };
   }
 
@@ -40,21 +41,27 @@ export default class Game extends React.Component {
     });
   }
 
-  sort(){
-    alert('working');
+  changeSort(){
+    let newSort = this.state.sortOrder == "descending" ? "ascending" : "descending";
+    this.setState({
+      sortOrder: newSort
+    });
   }
 
     render() {
       const history = this.state.history;
       const current = history[this.state.stepNumber];
-      const winner = calculateWinner(current.squares);
+      let winnerArray = calculateWinner(current.squares);
+      const winner = winnerArray != null ? winnerArray[0] : null;
+      const winnerSquares = winnerArray != null ? winnerArray[1] : null;
+      const draw = !current.squares.includes(null);
       
-      const moves = history.map((step, move) => {
+      let moves = history.map((step, move) => {
         let bolden = false;
-      if(this.state.stepNumber == move){
-        bolden = true;
-      }
-      const desc = move ? 'Go to move #' + move + " X: " + this.state.lastPos[0] + " Y: " + this.state.lastPos[1] : 'Go to game start';
+        if(this.state.stepNumber == move){
+          bolden = true;
+        }
+        const desc = move ? 'Go to move #' + move + " X: " + this.state.lastPos[0] + " Y: " + this.state.lastPos[1] : 'Go to game start';
         return (
           <li key={move}>
             <button className={bolden ? "bold" : ""} onClick={() => this.jumpTo(move)}>{desc}</button>
@@ -62,14 +69,22 @@ export default class Game extends React.Component {
         );
       });
 
+      if(this.state.sortOrder == 'ascending'){
+        moves = moves.reverse();
+      }
+
       let status;
       if (winner) {
         status = 'Winner: ' + winner;
+      } else if(draw){
+        status = "IT'S A DRAW!!!!!!"
       } else {
         status = 'Next player: ' + (this.state.xIsNext ? 'X' : 'O');
       }
 
-      let sort_toggle = <button onClick={() => this.sort()}>Ascending</button>
+      let sort_toggle = <button onClick={() => this.changeSort()}>
+        {this.state.sortOrder}
+        </button>
 
       return (
         <div className="game">
@@ -77,6 +92,7 @@ export default class Game extends React.Component {
             <Board 
             squares={current.squares}
             onClick={(i) => this.handleClick(i)}
+            winner={ winnerSquares }
             />
           </div>
           <div className="game-info">
@@ -105,7 +121,7 @@ export default class Game extends React.Component {
     for (let i = 0; i < lines.length; i++) {
       const [a, b, c] = lines[i];
       if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
-        return squares[a];
+        return [squares[a], lines[i]];
       }
     }
     return null;
